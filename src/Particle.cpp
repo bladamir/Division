@@ -46,7 +46,7 @@ void Particle::update( const Perlin &perlin, const Channel32f &channel, const Ve
 	mLoc.y = mOrigin.y + noiseVector.y * 10;
 
 	//mRadius	= mScale * mAgePer;
-	mRadius = mScale;
+	mRadius = mScale * ((noiseVector.y + 1.5f) * 0.5);
 	
 	mAge++;
 	//if( mAge > mLifespan ) mIsDead = true;
