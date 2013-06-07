@@ -72,6 +72,7 @@ void DivApp::setup()
 	mShowFPS = false;
 	mDrawNoise = false;
 
+	setFpsSampleInterval(1.0);
 	mParams = params::InterfaceGl( "Joy Division", Vec2i( 225, 200 ) );
 	mParams.setOptions( "", "iconified=true" );
 	mParams.addParam( "Show FPS", &mShowFPS);
