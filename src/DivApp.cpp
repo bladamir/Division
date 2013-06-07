@@ -166,7 +166,7 @@ void DivApp::draw()
 		gl::drawString( "Framerate: " + toString(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::white() );
 	}
 
-	params::InterfaceGl::draw();
+	mParams.draw();
 }
 
 CINDER_APP_BASIC( DivApp, RendererGl )

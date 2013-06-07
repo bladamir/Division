@@ -18,7 +18,7 @@ Particle::Particle( Vec2f loc, Vec2f vel )
 	mRadius			= 0.0f;
 	mScale			= 2.0f;
 	mAge			= 0;
-	mLifespan		= INFINITE;
+	mLifespan		= 100.0f;
 	mAgePer			= 1.0f;
 	mIsDead			= false;
 
