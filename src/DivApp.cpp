@@ -7,12 +7,14 @@
 #include "cinder/Utilities.h"
 #include "ParticleController.h"
 #include "cinder/params/Params.h"
+#include <list>
 
 #define RESOLUTION 10
 #define NUM_PARTICLES_TO_SPAWN 25
 
 using namespace ci;
 using namespace ci::app;
+using std::list;
 
 class DivApp : public AppBasic {
  public:
@@ -42,6 +44,7 @@ class DivApp : public AppBasic {
 	bool mSaveFrames;
 	bool mShowFPS;
 	bool mDrawNoise;
+	bool mDrawPoints;
 
 	params::InterfaceGl mParams;
 
@@ -71,21 +74,25 @@ void DivApp::setup()
 	mSaveFrames = false;
 	mShowFPS = false;
 	mDrawNoise = false;
+	mDrawPoints = false;
 
 	setFpsSampleInterval(1.0);
 	mParams = params::InterfaceGl( "Joy Division", Vec2i( 225, 200 ) );
 	mParams.setOptions( "", "iconified=true" );
 	mParams.addParam( "Show FPS", &mShowFPS);
 	mParams.addParam( "Show Noise Channel", &mDrawNoise );
+	mParams.addParam( "Show Control Points", &mDrawPoints );
 
 	int yn = 20;
-	int xn = 200;
-	for( int y=0; y<yn; y++ ){
-		for( int x=0; x<xn; x++ ){
+	int xn = 75;
+	for( int y=0; y<=yn; y++ ){
+		list<Vec2f> mVecs;
+		for( int x=0; x<=xn; x++ ){
 			float xf = (float)x/xn * getWindowWidth();
 			float yf = (float)y/yn *  (getWindowHeight() * 0.75f) + (getWindowHeight() * 0.175f);
-			mParticleController.addParticle( xf, yf);
+			mVecs.push_back(Vec2f(xf, yf));
 		}
+		mParticleController.addParticlesAsGroup(mVecs);
 	}
 }
 
@@ -140,20 +147,23 @@ void DivApp::draw()
 {	
 	gl::clear( Color( 0, 0, 0 ), true );
 
-	if (mDrawNoise)
-	{
-		mDrawParticles = false;
-		mParticleController.drawNoise();
-	} else 
-	{
-		mDrawParticles = true;
-	}
-	
 	if( mDrawImage ){
 		mTexture.enableAndBind();
 		gl::draw( mTexture, getWindowBounds() );
 	}
 	
+	if (mDrawNoise)
+	{
+		glDisable( GL_TEXTURE_2D );
+		mParticleController.drawNoise();
+	}
+	
+	if (mDrawPoints)
+	{
+		glDisable( GL_TEXTURE_2D );
+		mParticleController.drawPoints();
+	}
+
 	if( mDrawParticles ){
 		glDisable( GL_TEXTURE_2D );
 		mParticleController.draw();
@@ -166,6 +176,7 @@ void DivApp::draw()
 	if( mShowFPS ){
 		gl::drawString( "Framerate: " + toString(getAverageFps()), Vec2f( 10.0f, 10.0f ), Color::white() );
 	}
+
 
 	mParams.draw();
 }

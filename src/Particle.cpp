@@ -43,7 +43,7 @@ void Particle::update( const Perlin &perlin, const Channel32f &channel, const Ve
 
 	//mLoc += mVel;
 	//mVel *= mDecay;
-	mLoc.y = mOrigin.y + noiseVector.y * 10;
+	mLoc.y = mOrigin.y + noiseVector.y * 50;
 
 	//mRadius	= mScale * mAgePer;
 	mRadius = mScale * ((noiseVector.y + 1.5f) * 0.5);
