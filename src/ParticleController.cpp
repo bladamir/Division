@@ -2,9 +2,11 @@
 #include "cinder/Rand.h"
 #include "cinder/Vector.h"
 #include "ParticleController.h"
+#include "cinder/Path2d.h"
 
 using namespace ci;
 using std::list;
+using std::vector;
 
 ParticleController::ParticleController()
 {
@@ -12,12 +14,11 @@ ParticleController::ParticleController()
 
 void ParticleController::update( const Perlin &perlin, const Channel32f &channel, const Vec2i &mouseLoc )
 {
-	for( list<Particle>::iterator p = mParticles.begin(); p != mParticles.end(); ) {
-		if( p->mIsDead ){
-			p = mParticles.erase( p );
-		} else {
-			p->update( perlin, channel, mouseLoc );
-			++p;
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g )
+	{
+		for( list<Particle>::iterator p = g->begin(); p != g->end(); ++p) 
+		{
+				p->update( perlin, channel, mouseLoc );
 		}
 	}
 }
@@ -25,41 +26,93 @@ void ParticleController::update( const Perlin &perlin, const Channel32f &channel
 void ParticleController::draw()
 {
 	gl::color(Colorf::white());
-	for( list<Particle>::iterator p = mParticles.begin(); p != mParticles.end(); ++p ){
-		p->draw();
+
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g ){
+		vector<Vec2f> mPoints;
+
+		for( list<Particle>::iterator pf = g->begin(); pf != g->end(); ++pf ){
+			mPoints.push_back(pf->mLoc - Vec2f(0.0f,pf->mRadius*0.5f));
+		}
+		mPoints.push_back(g->rbegin()->mLoc - Vec2f(0.0f,g->rbegin()->mRadius*0.5f)); // double up top right
+		mPoints.push_back(g->rbegin()->mLoc + Vec2f(0.0f,g->rbegin()->mRadius*0.5f)); // double up bottom right
+		
+		for( list<Particle>::reverse_iterator pr = g->rbegin(); pr != g->rend(); ++pr ){
+			mPoints.push_back(pr->mLoc + Vec2f(0.0f,pr->mRadius*0.5f));
+		}
+		mPoints.push_back(g->begin()->mLoc + Vec2f(0.0f,g->begin()->mRadius*0.5f)); // double up bottom left
+
+		BSpline2f mSpline(mPoints, 3, true, false);
+		Path2d mPath(mSpline);
+		gl::drawSolid(mPath);
+	}
+}
+
+Vec2f ParticleController::calcCubicBezierPos( const Vec2f p[4], float t )
+{
+	/*
+	float nt = 1 - t;
+	float w0 = nt * nt * nt;
+	float w1 = 3 * nt * nt * t;
+	float w2 = 3 * nt * t * t;
+	float w3 = t * t * t;
+	return Vec2f( w0 * p[0].x + w1 * p[1].x + w2 * p[2].x + w3 * p[3].x, w0 * p[0].y + w1 * p[1].y + w2 * p[2].y + w3 * p[3].y );
+	*/
+	return p[1] + 0.5 * t * (p[2]-p[0] + t * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2]-p[3] + t * (3.0 * (p[1]-p[2]) + p[3] - p[0])));
+}
+
+void ParticleController::drawPoints()
+{
+	gl::color(Colorf::white());
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g )
+	{
+		for( list<Particle>::iterator p = g->begin(); p != g->end(); ++p) 
+		{
+			p->draw();
+		}
 	}
 }
 
 void ParticleController::drawNoise()
 {
-	for( list<Particle>::iterator p = mParticles.begin(); p != mParticles.end(); ++p ){
-		p->drawNoise();
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g )
+	{
+		for( list<Particle>::iterator p = g->begin(); p != g->end(); ++p) 
+		{
+			p->drawNoise();
+		}
 	}
 }
 
 void ParticleController::addParticle(int xi, int yi )
 {
+	if (mParticleGroups.empty())
+	{
+		std::list<Particle> particles;
+		mParticleGroups.push_back(particles);
+	}
 	Vec2f loc = Vec2f((float)xi, (float)yi);
 	Vec2f vel = Vec2f::zero();
-    mParticles.push_back( Particle( loc, vel ) );
+    mParticleGroups[0].push_back( Particle( loc, vel ) );
 }
 
-void ParticleController::addParticles( int amt, const Vec2i &mouseLoc, const Vec2f &mouseVel )
+void ParticleController::addParticlesAsGroup(std::list<ci::Vec2f> group)
 {
-	for( int i=0; i<amt; i++ )
+	std::list<Particle> particles;
+
+	for( list<Vec2f>::iterator v = group.begin(); v != group.end(); ++v )
 	{
-		Vec2f loc = mouseLoc + Rand::randVec2f() * 5.0f;
-		Vec2f velOffset = Rand::randVec2f() * Rand::randFloat( 1.0f, 5.0f );
-		Vec2f vel = mouseVel * 0.375f + velOffset;
-		mParticles.push_back( Particle( loc, vel ) );
+		Vec2f loc = *v;
+		particles.push_back(Particle(loc, Vec2f::zero()));
 	}
+
+	mParticleGroups.push_back(particles);
 }
 
 void ParticleController::removeParticles( int amt )
 {
 	for( int i=0; i<amt; i++ )
 	{
-		mParticles.pop_back();
+		mParticleGroups[0].pop_back();
 	}
 }
 

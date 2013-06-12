@@ -1,4 +1,9 @@
 vc11/Division.v11.suo
 vc11/Debug/
 .DS_Store
+<<<<<<< HEAD
 bin/
+=======
+xcuserdata/
+vc11/Division.opensdf
+>>>>>>> 44323c8acd4c578a637be40f0d76a52a947b8585
