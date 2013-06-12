@@ -28,56 +28,22 @@ void ParticleController::draw()
 	gl::color(Colorf::white());
 
 	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g ){
-		Path2d mPath;
-		mPath.clear();
-		std::list<Particle>::iterator prev;
-		std::list<Particle>::iterator next;
-		std::list<Particle>::iterator next2;
-		int index = 0;
-		for( list<Particle>::iterator p = g->begin(); p != g->end(); ++p ){
-			//p==g->begin() ? mPath.moveTo(p->mLoc) : mPath.lineTo(p->mLoc);
-			
-			Vec2f p0, p1, p2, p3;
+		vector<Vec2f> mPoints;
 
-			if (index == 0)
-			{
-				prev = p;
-				next = boost::next(p);
-				next2 = boost::next(p,2);
-			}
-			else if(index == g->size()-2)
-			{
-				prev = boost::prior(p);
-				next = boost::next(p);
-				next2 = next;
-			}
-			else if (index == g->size()-1)
-			{
-				prev = boost::prior(p);
-				next = p;
-				next2 = p;
-			} 
-			else
-			{
-				prev = boost::prior(p);
-				next = boost::next(p);
-				next2 = boost::next(p,2);
-			}
-
-			p0 = prev->mLoc;
-			p1 = p->mLoc;
-			p2 = next->mLoc;
-			p3 = next2->mLoc;
-			
-			Vec2f pp[4] = {p0, p1, p2, p3};
-			Vec2f c1 = calcCubicBezierPos(pp, 0.25f);
-			Vec2f c2 = calcCubicBezierPos(pp, 0.75f);
-			//app::console() << p0.x << " " << p1.x << " " << p2.x << " " << p3.x << " controls: " << c1.x << " " << c2.x << std::endl;
-			//p==g->begin() ? mPath.moveTo(p->mLoc) : mPath.lineTo(p->mLoc);
-			p==g->begin() ? mPath.moveTo(p->mLoc) : mPath.quadTo(p1, p2);
-			index++;
+		for( list<Particle>::iterator pf = g->begin(); pf != g->end(); ++pf ){
+			mPoints.push_back(pf->mLoc - Vec2f(0.0f,pf->mRadius*0.5f));
 		}
-		gl::draw(mPath);
+		mPoints.push_back(g->rbegin()->mLoc - Vec2f(0.0f,g->rbegin()->mRadius*0.5f)); // double up top right
+		mPoints.push_back(g->rbegin()->mLoc + Vec2f(0.0f,g->rbegin()->mRadius*0.5f)); // double up bottom right
+		
+		for( list<Particle>::reverse_iterator pr = g->rbegin(); pr != g->rend(); ++pr ){
+			mPoints.push_back(pr->mLoc + Vec2f(0.0f,pr->mRadius*0.5f));
+		}
+		mPoints.push_back(g->begin()->mLoc + Vec2f(0.0f,g->begin()->mRadius*0.5f)); // double up bottom left
+
+		BSpline2f mSpline(mPoints, 3, true, false);
+		Path2d mPath(mSpline);
+		gl::drawSolid(mPath);
 	}
 }
 
