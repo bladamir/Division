@@ -17,6 +17,8 @@
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
+		738275AB176678DA0082FCC7 /* cinder_app_icon.ico in Resources */ = {isa = PBXBuildFile; fileRef = 738275AA176678DA0082FCC7 /* cinder_app_icon.ico */; };
+		738275AD176678ED0082FCC7 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 738275AC176678ED0082FCC7 /* CinderApp.icns */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		E12CAFC2115F46F200D3D385 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E12CAFC1115F46F200D3D385 /* Particle.cpp */; };
 		E12CAFCB115F481300D3D385 /* ParticleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E12CAFCA115F481300D3D385 /* ParticleController.cpp */; };
@@ -38,6 +40,8 @@
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		738275AA176678DA0082FCC7 /* cinder_app_icon.ico */ = {isa = PBXFileReference; lastKnownFileType = image.ico; path = cinder_app_icon.ico; sourceTree = "<group>"; };
+		738275AC176678ED0082FCC7 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CinderApp.icns; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Div.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Div.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E12CAFC1115F46F200D3D385 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Particle.cpp; path = ../src/Particle.cpp; sourceTree = SOURCE_ROOT; };
@@ -115,6 +119,8 @@
 		29B97314FDCFA39411CA2CEA /* Div */ = {
 			isa = PBXGroup;
 			children = (
+				738275AC176678ED0082FCC7 /* CinderApp.icns */,
+				738275AA176678DA0082FCC7 /* cinder_app_icon.ico */,
 				29B97315FDCFA39411CA2CEA /* Headers */,
 				080E96DDFE201D6D7F000001 /* Source */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -201,6 +207,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				738275AB176678DA0082FCC7 /* cinder_app_icon.ico in Resources */,
+				738275AD176678ED0082FCC7 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
