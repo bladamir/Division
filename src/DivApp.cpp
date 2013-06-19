@@ -55,7 +55,7 @@ void DivApp::prepareSettings( Settings *settings )
 {
 	//settings->setWindowSize( 800, 600 );
 	settings->setFullScreen();
-	settings->setFrameRate( 60.0f );
+	//settings->setFrameRate( 60.0f );
 }
 
 void DivApp::setup()
@@ -82,6 +82,7 @@ void DivApp::setup()
 	mParams.addParam( "Show FPS", &mShowFPS);
 	mParams.addParam( "Show Noise Channel", &mDrawNoise );
 	mParams.addParam( "Show Control Points", &mDrawPoints );
+	mParams.addParam( "Show Lines", &mDrawParticles);
 
 	int yn = 80;
 	int xn = 50;
@@ -181,4 +182,4 @@ void DivApp::draw()
 	mParams.draw();
 }
 
-CINDER_APP_BASIC( DivApp, RendererGl )
+CINDER_APP_BASIC( DivApp, RendererGl(3) )

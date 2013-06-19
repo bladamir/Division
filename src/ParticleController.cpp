@@ -1,8 +1,9 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
 #include "cinder/Rand.h"
 #include "cinder/Vector.h"
 #include "ParticleController.h"
 #include "cinder/Path2d.h"
+#include "cinder/PolyLine.h"
 
 using namespace ci;
 using std::list;
@@ -27,9 +28,12 @@ void ParticleController::draw()
 {
 	gl::color(Colorf::white());
 
-	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g ){
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g )
+	{
 		vector<Vec2f> mPoints;
 
+
+		/*
 		for( list<Particle>::iterator pf = g->begin(); pf != g->end(); ++pf ){
 			mPoints.push_back(pf->mLoc - Vec2f(0.0f,pf->mRadius*0.5f));
 		}
@@ -40,10 +44,30 @@ void ParticleController::draw()
 			mPoints.push_back(pr->mLoc + Vec2f(0.0f,pr->mRadius*0.5f));
 		}
 		mPoints.push_back(g->begin()->mLoc + Vec2f(0.0f,g->begin()->mRadius*0.5f)); // double up bottom left
+		*/
+		//BSpline2f mSpline(mPoints, 3, true, false);
+		//Path2d mPath(mSpline);
+		//gl::drawSolid(mPath);
 
-		BSpline2f mSpline(mPoints, 3, true, false);
-		Path2d mPath(mSpline);
-		gl::drawSolid(mPath);
+		for( list<Particle>::iterator pf = g->begin(); boost::next(pf) != g->end(); ++pf )
+		{
+			glLineWidth(pf->mRadius);
+			gl::drawLine(pf->mLoc,(boost::next(pf))->mLoc);
+		}
+
+		/*
+		PolyLine<Vec2f> polyline;
+		int npnts = 200;
+		for(int i = 0; i < npnts; i++){
+			polyline.push_back(
+				mSpline.getPosition(i / (npnts - 1.0f))
+			);
+		}
+
+		gl::draw(polyline);
+		*/
+
+		
 	}
 }
 
