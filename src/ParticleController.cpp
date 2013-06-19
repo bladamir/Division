@@ -51,7 +51,7 @@ void ParticleController::draw()
 		{
 			mPoints.push_back(pf->mLoc);
 		}
-		BSpline2f mSpline(mPoints, 3, true, false);
+		BSpline2f mSpline(mPoints, 3, false, true);
 		//Path2d mPath(mSpline);
 		//gl::drawSolid(mPath);
 
