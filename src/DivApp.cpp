@@ -15,6 +15,7 @@
 
 using namespace ci;
 using namespace ci::app;
+using namespace gl;
 using std::list;
 
 class DivApp : public AppNative {
@@ -60,7 +61,19 @@ void DivApp::prepareSettings( Settings *settings )
 }
 
 void DivApp::setup()
-{	
+{
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    
+    glEnable(GL_POLYGON_SMOOTH);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    
+    glEnable(GL_MULTISAMPLE_ARB);
+    
+    
 	mPerlin = Perlin();
 	
 	Url url( "http://libcinder.org/media/tutorial/paris.jpg" );
@@ -183,4 +196,4 @@ void DivApp::draw()
 	mParams.draw();
 }
 
-CINDER_APP_BASIC( DivApp, RendererGl(3) )
+CINDER_APP_BASIC( DivApp, RendererGl(RendererGl::AA_MSAA_16) )
