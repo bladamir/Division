@@ -1,4 +1,5 @@
-#include "cinder/app/AppBasic.h"
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
 #include "cinder/ImageIO.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/Perlin.h"
@@ -16,7 +17,7 @@ using namespace ci;
 using namespace ci::app;
 using std::list;
 
-class DivApp : public AppBasic {
+class DivApp : public AppNative {
  public:
 	void prepareSettings( Settings *settings );
 	void keyDown( KeyEvent event );
@@ -84,8 +85,8 @@ void DivApp::setup()
 	mParams.addParam( "Show Control Points", &mDrawPoints );
 	mParams.addParam( "Show Lines", &mDrawParticles);
 
-	int yn = 80;
-	int xn = 50;
+	int yn = 45;
+	int xn = 30;
 	for( int y=0; y<=yn; y++ ){
 		list<Vec2f> mVecs;
 		for( int x=0; x<=xn; x++ ){

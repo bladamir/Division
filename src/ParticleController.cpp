@@ -3,6 +3,7 @@
 #include "ParticleController.h"
 #include "cinder/Path2d.h"
 #include "cinder/PolyLine.h"
+#include "cinder/gl/gl.h"
 
 using namespace ci;
 using std::list;
@@ -60,9 +61,9 @@ void ParticleController::draw()
 		pf = g->begin();
 		for(int i = 0; i < npnts-1; i++)
 		{
-			float factor = (float)(i%midpoints) / midpoints;
+			float factor = (float)(i%(midpoints-1)) / (midpoints-1);
 			float w;
-			(boost::next(pf) != g->end()) ? w = pf->mRadius + (pf->mRadius - boost::next(pf)->mRadius) * factor : w = pf->mRadius;
+			(boost::next(pf) != g->end()) ? w = pf->mRadius + (boost::next(pf)->mRadius - pf->mRadius) * factor : w = pf->mRadius;
 			glLineWidth(w);
 			gl::drawLine(	mSpline.getPosition(i / (npnts - 1.0f)), 
 							mSpline.getPosition((i+1) / (npnts - 1.0f)));
