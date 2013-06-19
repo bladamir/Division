@@ -3,6 +3,7 @@
 #include "cinder/Vector.h"
 #include "ParticleController.h"
 #include "cinder/Path2d.h"
+#include "cinder/PolyLine.h"
 
 using namespace ci;
 using std::list;
@@ -27,7 +28,8 @@ void ParticleController::draw()
 {
 	gl::color(Colorf::white());
 
-	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g ){
+	for( vector< list<Particle> >::iterator g = mParticleGroups.begin(); g != mParticleGroups.end(); ++g )
+	{
 		vector<Vec2f> mPoints;
 
 		for( list<Particle>::iterator pf = g->begin(); pf != g->end(); ++pf ){
@@ -42,6 +44,15 @@ void ParticleController::draw()
 		mPoints.push_back(g->begin()->mLoc + Vec2f(0.0f,g->begin()->mRadius*0.5f)); // double up bottom left
 
 		BSpline2f mSpline(mPoints, 3, true, false);
+
+		PolyLine<Vec2f> polyline;
+		int npnts = 100;
+		for(int i = 0; i < npnts; i++){
+			polyline.push_back(
+				mSpline.getPosition(i / (npnts - 1.0f))
+			);
+		}
+
 		Path2d mPath(mSpline);
 		gl::drawSolid(mPath);
 	}
