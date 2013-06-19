@@ -84,7 +84,7 @@ void DivApp::setup()
 	mParams.addParam( "Show Control Points", &mDrawPoints );
 
 	int yn = 80;
-	int xn = 20;
+	int xn = 50;
 	for( int y=0; y<=yn; y++ ){
 		list<Vec2f> mVecs;
 		for( int x=0; x<=xn; x++ ){
