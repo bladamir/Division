@@ -1,4 +1,3 @@
-#include "cinder/app/AppNative.h"
 #include "cinder/Rand.h"
 #include "cinder/Vector.h"
 #include "ParticleController.h"
@@ -61,7 +60,10 @@ void ParticleController::draw()
 		pf = g->begin();
 		for(int i = 0; i < npnts-1; i++)
 		{
-			glLineWidth(pf->mRadius);
+			float factor = (float)(i%midpoints) / midpoints;
+			float w;
+			(boost::next(pf) != g->end()) ? w = pf->mRadius + (pf->mRadius - boost::next(pf)->mRadius) * factor : w = pf->mRadius;
+			glLineWidth(w);
 			gl::drawLine(	mSpline.getPosition(i / (npnts - 1.0f)), 
 							mSpline.getPosition((i+1) / (npnts - 1.0f)));
 			if (i!= 0 && i%midpoints == 0) ++pf;
