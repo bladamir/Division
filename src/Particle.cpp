@@ -21,6 +21,7 @@ Particle::Particle( Vec2f loc, Vec2f vel )
 	mLifespan		= 100.0f;
 	mAgePer			= 1.0f;
 	mIsDead			= false;
+	mChannelState	= false;
 
 	noiseVector = Vec2f(0.5f,0.5f);
 }	

@@ -71,8 +71,6 @@ void ParticleController::draw()
 							mSpline.getPosition((i+1) / (npnts - 1.0f)));
 			if (i%midpoints == midpoints-1) ++pf;
 		}
-
-		
 	}
 }
 

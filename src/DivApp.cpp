@@ -76,8 +76,7 @@ void DivApp::setup()
     
 	mPerlin = Perlin();
 	
-	Url url( "http://libcinder.org/media/tutorial/paris.jpg" );
-	mChannel = Channel32f( loadImage( loadUrl( url ) ) );
+	mChannel = Channel32f(loadImage(loadAsset("UXCA_NewIdentity_Beta_1.jpg")));
 	mTexture = mChannel;
 
 	mMouseLoc = Vec2i( 0, 0 );
